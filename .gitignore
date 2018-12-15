@@ -1,0 +1,9 @@
+env/
+.vscode
+version
+*.pyc
+*.egg-info/
+__pycache__
+*.html
+build/
+dist/
