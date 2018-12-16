@@ -228,7 +228,8 @@ methods, and attributes are not directly exposed in the public interface.
   [`enter()`](https://docs.python.org/3/library/sched.html#sched.scheduler.enter)
   or
   [`enterabs()`](https://docs.python.org/3/library/sched.html#sched.scheduler.enterabs)
-  methods. Use the superior `oneshot()` or `repeat()` methods instead.
+  methods. Use the superior `oneshot()`, `repeat()`,
+  `oneshot_on_days()`, or `repeat_on_days()` methods instead.
 - Provides a more specific `count()` method instead of
   [`empty()`](https://docs.python.org/3/library/sched.html#sched.scheduler.empty).
 - Does not provide the
