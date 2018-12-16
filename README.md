@@ -4,9 +4,12 @@ The `timesched` Python module provides a simple time event scheduler. It
 is implemented upon the standard Python
 [`sched`](https://docs.python.org/3/library/sched.html) module and is
 used in a similar way, but provides a nicer and more modern and
-convenient programming interface. It requires only
+convenient programming interface. Apart from normal oneshot and repeat
+timers, it can run timers at a given time of day, and for the given days
+of week, providing simple cron-like functionality. It requires only
 Python 3.4 or later, and the standard library. The latest version of
-this document and code is available at https://github.com/bulletmark/timesched.
+this document and code is available at
+https://github.com/bulletmark/timesched.
 
 ```python
 class timesched.Scheduler(timefunc=time.time, delayfunc=time.sleep)
@@ -63,6 +66,42 @@ callback. Many applications are not concerned about this distinction but if
 necessary you can instead invoke a _oneshot()_ absolute timer between
 each call.
 
+#### Create one-shot timer on next given day
+
+Call this with _time_ = `datetime.time()` to invoke a `oneshot()` at the
+given _time_ on the next day from the set of given _days_ of the week.
+
+```python
+oneshot_on_days(days, time, priority, func, *args, **kwargs)
+```
+
+- _days_: A list/sequence/range of integers 0-6 where 0 = Monday to 6 =
+  Sunday. e.g. [0] means only invoke timer on a Monday, [0,6] = only
+  invoke on Monday and Sunday, etc. Using `days=range(7)` is same as
+  calling ordinary `oneshot()`.
+
+  Alternately, you can specify _days_ as a string "MTWTFSS" where each
+  char is upper case if the day is to be set, and lower case if not.
+  E.g. "MTWTFss" is the working week Mon-Fri, "mtwTfss" is Thu only,
+  etc. A utility function to explicitly parse this string into a list of
+  integers is available as `timesched.parse_days(string_arg)` if you
+  need.
+
+Remaining parameters and return type are same as `oneshot()`.
+
+#### Create repeating timer on given days
+
+Call this with _time_ = `datetime.time()` to invoke a `repeat()` at the
+given _period_ on each of the given _days_ of the week.
+
+```python
+repeat_on_days(days, period, priority, func, *args, **kwargs)
+```
+
+- _days_: parameter same as `oneshot_on_days()`.
+
+Remaining parameters and return type are same as `repeat()`.
+
 #### Return count of active timers
 
 ```python
@@ -96,7 +135,8 @@ module](https://docs.python.org/3/library/sched.html#sched.scheduler.run).
 
 ```python
 #!/usr/bin/python3
-from datetime import datetime, timedelta, date, time
+'Example code and small test suite.'
+from datetime import datetime, timedelta
 import timesched
 
 # Create a scheduler
@@ -110,32 +150,42 @@ now = datetime.now()
 callback('started', 'now')
 
 # Set one shot timer to run 10 secs from now, passing int value
-arg = 10
-s.oneshot(arg, 0, callback, 'oneshot', arg)
+secs = 10
+s.oneshot(secs, 0, callback, 'oneshot', secs)
 
 # Set one shot timer to run 1 min from now, passing timedelta() value
-arg = timedelta(minutes=1)
-s.oneshot(arg, 0, callback, 'oneshot', arg)
+minute = timedelta(minutes=1)
+s.oneshot(minute, 0, callback, 'oneshot', minute)
 
 # Set one shot timer to run at absolute time, passing datetime() value
-arg = now + timedelta(minutes=1)
-s.oneshot(arg, 0, callback, 'oneshot', arg)
+nextmin = now + minute
+s.oneshot(nextmin, 0, callback, 'oneshot', nextmin)
 
 # Set one shot timer to run at absolute time today, passing time() value
-arg = (now + timedelta(minutes=1)).time()
-s.oneshot(arg, 0, callback, 'oneshot', arg)
+nexttime = nextmin.time()
+s.oneshot(nexttime, 0, callback, 'oneshot', nexttime)
 
 # Set repeat timer to run every 10 secs, passing int value
-arg = 10
-s.repeat(arg, 0, callback, 'repeat', arg)
+s.repeat(secs, 0, callback, 'repeat', secs)
 
 # Set repeat timer to run every 1 min, passing timedelta() value
-arg = timedelta(minutes=1)
-s.repeat(arg, 0, callback, 'repeat', arg)
+s.repeat(minute, 0, callback, 'repeat', minute)
 
 # Set repeat timer to run every day at given time, passing time() value
-arg = (now + timedelta(minutes=1)).time()
-s.repeat(arg, 0, callback, 'repeat', arg)
+s.repeat(nexttime, 0, callback, 'repeat', nexttime)
+
+# Set repeat timer to run every weekday at given time, passing time() value
+s.repeat_on_days([nextmin.weekday()], nexttime, 0, callback,
+        'repeat_on_days', nexttime)
+# Same this but run every day and use string for day of week
+s.repeat_on_days('MTWTFSS', nexttime, 0, callback, 'repeat_on_days', nexttime)
+
+# Create and then immediately cancel a couple of timers before they
+# execute.
+timer1 = s.oneshot(secs, 0, callback, 'oneshot', 'cancel')
+timer2 = s.repeat(secs, 0, callback, 'repeat', 'cancel')
+s.cancel(timer1)
+s.cancel(timer2)
 
 # Run scheduler, will block until no timers left running
 s.run()
@@ -156,14 +206,21 @@ methods, and attributes are not directly exposed in the public interface.
   [`datetime.timedelta()`](https://docs.python.org/3/library/datetime.html#timedelta-objects),
   and integer time arguments, based automatically on the type of the
   passed time argument.
+- The `repeat()` method sets itself up to be automatically invoked again
+  at the next repeat interval, unlike `sched` which only provides a
+  `oneshot()` equivalent method [i.e. `enter()` or `enterabs()`] so the user
+  does not need to explicitly set up the next timer.
 - Provides a convenient way to schedule a timer at a given time each
   day to give simple daily "cron-like" functionality, e.g.
   `s.repeat(datetime.time(hour=10, minute=30), f)` to periodically
   activate a timer at 10:30 every day.
-- The `repeat()` method sets itself up to be automatically invoked again
-  at the next repeat interval, unlike `sched` which only provides a
-  `oneshot()` equivalent method [`enter()` or `enterabs()`] so the user
-  does not need to explicitly set up the next timer.
+- Further to the above `repeat()` which can run at a given time every
+  day, you can use `repeat_on_days()` to specify a given time on a set
+  of given days, e.g. `s.repeat_on_days('MTWTFss',
+  datetime.time(hour=10, minute=30), f)` to run the timer at 10:30 each
+  workday only (Mon to Fri). Alternately `s.repeat_on_days(range(5),
+  datetime.time(hour=10, minute=30), f)`
+  gives the same result.
 - Consistent with modern Python, allows user to plainly specify `*args`
   and `**kwargs` directly in timer setup call rather than in a tuple as
   legacy `sched` requires.
