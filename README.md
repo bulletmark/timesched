@@ -204,7 +204,7 @@ methods, and attributes are not directly exposed in the public interface.
   [`datetime.date()`](https://docs.python.org/3/library/datetime.html#date-objects),
   [`datetime.time()`](https://docs.python.org/3/library/datetime.html#time-objects),
   [`datetime.timedelta()`](https://docs.python.org/3/library/datetime.html#timedelta-objects),
-  and integer time arguments, based automatically on the type of the
+  and also integer time arguments, based automatically on the type of the
   passed time argument.
 - The `repeat()` method sets itself up to be automatically invoked again
   at the next repeat interval, unlike `sched` which only provides a

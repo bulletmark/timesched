@@ -5,7 +5,7 @@ M.Blakeney, Nov 2018.
 import sched, time, datetime
 from functools import singledispatch, partial
 
-# Optional day of week format string, default all days
+# Optional day of week format string, default all days enabled
 DAYS_STRING = 'MTWTFSS'
 
 def parse_days(arg=None):
@@ -22,36 +22,36 @@ def parse_days(arg=None):
 
     return [i for i, a in enumerate(arg) if a.isupper()]
 
-# Dispatch timer based on type
+# Dispatch timer based on type (first arg)
 @singledispatch
-def _invoke(timev, timer):
+def _invoke(timev, self):
     'Invoke after default int/float secs'
-    return timer.sched.enter(timev, timer.prio, timer.cb)
+    return self.sched.enter(timev, self.prio, self.cb)
 
 @_invoke.register(datetime.timedelta)
-def _(timev, timer):
+def _(timev, self):
     'Invoke after datetime.timedelta()'
-    return timer.sched.enter(timev.total_seconds(), timer.prio, timer.cb)
+    return self.sched.enter(timev.total_seconds(), self.prio, self.cb)
 
 @_invoke.register(datetime.datetime)
-def _(timev, timer):
+def _(timev, self):
     'Invoke at datetime.datetime()'
-    if not timer.oneshot:
+    if not self.oneshot:
         raise TypeError('Can not repeat a datetime.datetime()')
 
-    return timer.sched.enterabs(timev.timestamp(), timer.prio, timer.cb)
+    return self.sched.enterabs(timev.timestamp(), self.prio, self.cb)
 
 @_invoke.register(datetime.date)
-def _(timev, timer):
+def _(timev, self):
     'Invoke at datetime.date()'
-    if not timer.oneshot:
+    if not self.oneshot:
         raise TypeError('Can not repeat a datetime.date()')
 
     datev = datetime.datetime.combine(timev, datetime.time())
-    return timer.sched.enterabs(datev.timestamp(), timer.prio, timer.cb)
+    return self.sched.enterabs(datev.timestamp(), self.prio, self.cb)
 
 @_invoke.register(datetime.time)
-def _(timev, timer):
+def _(timev, self):
     'Invoke at next datetime.time() compared to current time, and on given days'
     now = datetime.datetime.now()
     dow = now.weekday()
@@ -61,13 +61,13 @@ def _(timev, timer):
         days += 1
 
     for days in range(days, days + 7):
-        if timer.days[dow]:
+        if self.days[dow]:
             break
         dow = ((dow + 1) % 7)
 
     nextd = now + datetime.timedelta(days=days)
     time = datetime.datetime.combine(nextd.date(), timev)
-    return timer.sched.enterabs(time.timestamp(), timer.prio, timer.cb)
+    return self.sched.enterabs(time.timestamp(), self.prio, self.cb)
 
 class _Timer():
     'Internal class to manage a single instance of a timer'
