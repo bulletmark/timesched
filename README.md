@@ -18,7 +18,7 @@ class timesched.Scheduler(timefunc=time.time, delayfunc=time.sleep)
 Refer to the class description for Python
 [sched.scheduler](https://docs.python.org/3/library/sched.html#sched.scheduler)
 which is used in the [internal
-implementation](#differences-to-sched-module) of this class.
+implementation](#differences-to-standard-sched-module) of this class.
 
 _Scheduler_ instances have the following methods.
 
