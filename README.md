@@ -243,6 +243,9 @@ methods, and attributes are not directly exposed in the public interface.
 
 ## INSTALLATION
 
+Arch Linux users can install [timesched from the
+AUR](https://aur.archlinux.org/packages/timesched/).
+
 `timesched` is [available on PyPI](https://pypi.org/project/timesched/)
 so install the usual way, e.g:
 
