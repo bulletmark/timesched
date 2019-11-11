@@ -14,28 +14,33 @@
 
 NAME = timesched
 
+DOC = README.md
+DOCOUT = $(DOC:.md=.html)
+
 all:
-	@echo "Type sudo make install|uninstall, or make check|clean"
+	@echo "Type sudo make install|uninstall"
+	@echo "or make sdist|upload|doc|check|clean"
 
 install:
-	@python3 setup.py install --root=$(or $(DESTDIR),/) --optimize=1
+	pip3 install .
 
 uninstall:
-	@rm -vrf $(DESTDIR)/usr/bin/$(NAME)* $(DESTDIR)/etc/$(NAME).conf \
-	    $(DESTDIR)/usr/share/doc/$(NAME) \
-	    $(DESTDIR)/usr/lib/python*/site-packages/*$(NAME)* \
-	    $(DESTDIR)/usr/lib/python*/site-packages/*/*$(NAME)*
+	pip3 uninstall $(NAME)
 
 sdist:
 	python3 setup.py sdist
 
 upload: sdist
-	twine upload dist/*
+	twine3 upload dist/*
 
 doc:	$(DOCOUT)
 
+$(DOCOUT): $(DOC)
+	markdown $< >$@
+
 check:
 	flake8 *.py
+	vermin -i -q *.py
 
 clean:
 	@rm -vrf $(DOCOUT) *.egg-info build/ dist/ __pycache__/

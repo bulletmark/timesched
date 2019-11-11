@@ -250,7 +250,7 @@ AUR](https://aur.archlinux.org/packages/timesched/).
 so install the usual way, e.g:
 
 ```bash
-pip install timesched
+pip3 install timesched
 ```
 
 Or explicitly from [github](https://github.com/bulletmark/timesched):
@@ -258,7 +258,7 @@ Or explicitly from [github](https://github.com/bulletmark/timesched):
 ```bash
 git clone https://github.com/bulletmark/timesched.git
 cd timesched
-sudo make install
+sudo pip3 install .
 ```
 
 <!-- vim: se ai syn=markdown: -->
