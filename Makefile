@@ -12,7 +12,7 @@
 # General Public License at <http://www.gnu.org/licenses/> for more
 # details.
 
-NAME = timesched
+NAME = $(shell basename $(CURDIR))
 
 DOC = README.md
 DOCOUT = $(DOC:.md=.html)
