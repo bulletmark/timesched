@@ -42,6 +42,7 @@ $(DOCOUT): $(DOC)
 check:
 	flake8 *.py
 	vermin -i -q *.py
+	python3 setup.py check
 
 clean:
 	@rm -vrf $(DOCOUT) *.egg-info build/ dist/ __pycache__/
