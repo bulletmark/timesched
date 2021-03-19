@@ -2,7 +2,9 @@
 A simple class to provide oneshot and repeat timers.
 M.Blakeney, Nov 2018.
 '''
-import sched, time, datetime
+import sched
+import time
+import datetime
 from functools import singledispatch, partial
 
 # Optional day of week format string, default all days enabled
@@ -85,7 +87,7 @@ class _Timer():
         self.active = True
         self.parent._count += 1
         # Kick off timer and keep ID (for possible cancel)
-        self.eventid = _invoke(self.time, self)
+        self.eventid = _invoke(time, self)
 
     def cb(self):
         'Internal callback to invoke user function and reschedule repeat timer'
