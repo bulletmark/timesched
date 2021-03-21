@@ -58,7 +58,7 @@ def _(timev, self):
     now = datetime.datetime.now()
     dow = now.weekday()
     days = 0
-    if timev < now.time():
+    if timev <= now.time():
         dow = ((dow + 1) % 7)
         days += 1
 

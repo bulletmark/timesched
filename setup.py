@@ -11,7 +11,7 @@ here = Path(__file__).resolve().parent
 
 setup(
     name=name,
-    version='1.5',
+    version='1.6',
     description='Improved simple time scheduler based on standard sched',
     long_description=here.joinpath('README.md').read_text(),
     long_description_content_type='text/markdown',
