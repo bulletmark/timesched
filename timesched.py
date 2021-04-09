@@ -71,7 +71,7 @@ def _(timev, self):
     time = datetime.datetime.combine(nextd.date(), timev)
     return self.sched.enterabs(time.timestamp(), self.prio, self.cb)
 
-class _Timer():
+class _Timer:
     'Internal class to manage a single instance of a timer'
     def __init__(self, oneshot, sched, days, time, prio, func):
         self.oneshot = oneshot
@@ -111,7 +111,7 @@ class _Timer():
         if self.eventid:
             self.sched.cancel(self.eventid)
 
-class Scheduler():
+class Scheduler:
     'A simple scheduler class to provide oneshot and repeat timers'
     def __init__(self, timefunc=time.time, delayfunc=time.sleep):
         '''
