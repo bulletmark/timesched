@@ -1,6 +1,6 @@
 ## TIMESCHED
 [![PyPi](https://img.shields.io/pypi/v/timesched)](https://pypi.org/project/timesched/)
-[![AUR](https://img.shields.io/aur/version/timesched)](https://aur.archlinux.org/packages/timesched/)
+[![AUR](https://img.shields.io/aur/version/python-timesched)](https://aur.archlinux.org/packages/python-timesched/)
 
 The `timesched` Python module provides a simple time event scheduler. It
 is implemented upon the standard Python
