@@ -19,8 +19,8 @@ def parse_days(arg=None):
         return arg
 
     if arg.upper() != DAYS_STRING:
-        raise ValueError('Day of week string must be case {} format'.format(
-            DAYS_STRING))
+        raise ValueError('Day of week string must be case '
+                f'{DAYS_STRING} format')
 
     return [i for i, a in enumerate(arg) if a.isupper()]
 

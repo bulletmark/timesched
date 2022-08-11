@@ -7,8 +7,8 @@ import timesched
 s = timesched.Scheduler()
 
 def callback(typ, arg):
-    print('{} {} {}, active={}'.format(str(datetime.now())[:19], typ,
-        arg, s.count()))
+    ds = str(datetime.now())[:19]
+    print(f'{ds} {typ} {arg}, active={s.count()}')
 
 now = datetime.now()
 callback('started', 'now')

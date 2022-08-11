@@ -143,7 +143,7 @@ from datetime import datetime, time
 
 # Job function to be called for each timer
 def job(jobid):
-    print('Job {} called at {}'.format(jobid, datetime.now()))
+    print(f'Job {jobid} called at {datetime.now()}')
 
 # Create a scheduler
 s = timesched.Scheduler()
