@@ -18,8 +18,8 @@ upload: sdist
 	twine3 upload --skip-existing dist/*
 
 check:
-	flake8 *.py
-	vermin --no-tips -q *.py
+	f8 *.py
+	vermin --no-tips -i *.py
 	python3 setup.py check
 
 clean:

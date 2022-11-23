@@ -9,7 +9,7 @@ used in a similar way, but provides a nicer and more modern and
 convenient programming interface. Apart from normal oneshot and repeat
 timers, it can run timers at a given time of day, and for the given days
 of week, providing simple cron-like functionality. It requires only
-Python 3.4 or later, and the standard library. The latest version of
+Python 3.6 or later, and the standard library. The latest version of
 this document and code is available at
 https://github.com/bulletmark/timesched.
 
