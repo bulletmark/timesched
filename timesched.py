@@ -11,18 +11,18 @@ from functools import singledispatch, partial
 DAYS_STRING = 'MTWTFSS'
 
 def parse_days(arg=None):
-    'Utility function to convert "Date Of Week" string to list of ints'
+    'Utility function to convert "Day Of Week" string to set of ints'
     if arg is None:
         arg = DAYS_STRING
 
     if not isinstance(arg, str):
-        return arg
+        return set(arg)
 
     if arg.upper() != DAYS_STRING:
         raise ValueError('Day of week string must be case '
                 f'{DAYS_STRING} format')
 
-    return [i for i, a in enumerate(arg) if a.isupper()]
+    return set(i for i, a in enumerate(arg) if a.isupper())
 
 # Dispatch timer based on type (first arg)
 @singledispatch
@@ -63,7 +63,7 @@ def _(timev, self):
         days += 1
 
     for days in range(days, days + 7):
-        if self.days[dow]:
+        if dow in self.days:
             break
         dow = ((dow + 1) % 7)
 
@@ -77,9 +77,8 @@ class _Timer:
         self.oneshot = oneshot
         self.parent = sched
         self.sched = sched._sched
-        daylist = set(parse_days(days))
-        self.days = [(i in daylist) for i in range(7)]
-        if not any(self.days):
+        self.days = parse_days(days)
+        if not self.days:
             raise ValueError('Must specify at least one day, 0-6')
         self.time = time
         self.prio = prio

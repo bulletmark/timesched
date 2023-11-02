@@ -77,15 +77,15 @@ given _time_ on the next day from the set of given _days_ of the week.
 oneshot_on_days(days, time, priority, func, *args, **kwargs)
 ```
 
-- _days_: A list/sequence/range of integers 0-6 where 0 = Monday to 6 =
-  Sunday. e.g. [0] means only invoke timer on a Monday, [0,6] = only
+- _days_: A list/set/sequence/range of integers 0-6 where 0 = Monday to
+  6 = Sunday. e.g. [0] means only invoke timer on a Monday, [0,6] = only
   invoke on Monday and Sunday, etc. Using `days=range(7)` is same as
   calling ordinary `oneshot()`.
 
   Alternately, you can specify _days_ as a string "MTWTFSS" where each
   char is upper case if the day is to be set, and lower case if not.
   E.g. "MTWTFss" is the working week Mon-Fri, "mtwTfss" is Thu only,
-  etc. A utility function to explicitly parse this string into a list of
+  etc. A utility function to explicitly parse this string into a set of
   integers is available as `timesched.parse_days(string_arg)` if you
   need.
 
