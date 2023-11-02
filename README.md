@@ -89,6 +89,8 @@ oneshot_on_days(days, time, priority, func, *args, **kwargs)
   integers is available as `timesched.parse_days(string_arg)` if you
   need.
 
+- _time_: `datetime.time()` for given time on the next given day.
+
 Remaining parameters and return type are same as `oneshot()`.
 
 #### Create repeating timer on given days
@@ -101,6 +103,8 @@ repeat_on_days(days, period, priority, func, *args, **kwargs)
 ```
 
 - _days_: parameter same as `oneshot_on_days()`.
+
+- _period_: `datetime.time()` for given time on the given days.
 
 Remaining parameters and return type are same as `repeat()`.
 

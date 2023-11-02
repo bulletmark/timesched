@@ -80,6 +80,11 @@ class _Timer:
         self.days = parse_days(days)
         if not self.days:
             raise ValueError('Must specify at least one day, 0-6')
+
+        if not isinstance(time, datetime.time) and \
+                len(self.days) != len(DAYS_STRING):
+            raise TypeError('Can only specify days with datetime.time()')
+
         self.time = time
         self.prio = prio
         self.func = func
