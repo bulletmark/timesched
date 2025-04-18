@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "timesched"
 description = "Improved simple time scheduler based on standard sched"
 readme = "README.md"
+license = "GPL-3.0-or-later"
 requires-python = ">=3.6"
 keywords = ["sched", "scheduler", "timer", "periodic", "cron", "crontab"]
 classifiers = [
@@ -19,9 +20,6 @@ email = "mark.blakeney@bullet-systems.net"
 
 [project.urls]
 Homepage = "https://github.com/bulletmark/timesched"
-
-[project.license]
-text = "GPLv3"
 
 [tool.setuptools_scm]
 version_scheme = "post-release"
